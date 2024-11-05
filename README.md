@@ -6,7 +6,7 @@ cette application permet de gerer les congé le pointage et l'evalutaion au sein
 Instructions pour installer le projet.
 
 # Cloner le dépôt
-git clone https://github.com/yourusername/gestion_entreprise.git
+git clone https://github.com/gestion_entreprise/gestion_entreprise.git
 
 # Aller dans le répertoire du projet
 cd gestion_entreprise
