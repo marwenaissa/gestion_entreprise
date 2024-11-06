@@ -7,6 +7,12 @@ back-end:
 mkdir gestion-entreprise-backend /
 cd gestion-entreprise-backend /
 apres avoir mettre le fichier package.json /
+npm install passport /
+npm install passport-local /
+npm install bcryptjs /
+npm install express-session /
+npm install jsonwebtoken /
+
 npm init
 
 front-end:
