@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure the sidebar stays fixed */
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  font-family: sans-serif;
+}
+
+.main-content {
+  margin-left: 16rem; /* 64px for the sidebar */
+  padding: 1rem;
+}
+
+
 .App {
   text-align: center;
 }

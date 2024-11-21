@@ -2,35 +2,40 @@ const express = require('express');
 const router = express.Router();
 const Leave = require('../models/Leave');
 
-
+// Route pour ajouter un congé
 router.post('/', async (req, res) => {
-    console.log("Request body:", req.body); // Affiche le body reçu
-    
-    // Créer une instance de Leave avec des données statiques
+    console.log("Request body:", req.body); // Affiche le body reçu pour le débogage
+
+    // Vérifier que toutes les données nécessaires sont présentes dans req.body
+    const { employeeId, startDate, endDate, type, status, reason } = req.body;
+
+    if (!employeeId || !startDate || !endDate || !type || !status || !reason) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Créer une instance de Leave avec les données reçues
     const leave = new Leave({
-        employeeId: "64fa8c3efb9e7a4d2f6b1234", // ID statique
-        startDate: "2024-11-15",               // Date de début statique
-        endDate: "2024-11-20",                 // Date de fin statique
-        type: "Paid",                          // Type de congé statique
-        status: "Pending",                     // Statut statique
-        reason: "Family vacation"              // Raison statique
+        employeeId,
+        startDate,
+        endDate,
+        type,
+        status,
+        reason,
     });
 
     try {
-        const savedLeave = await leave.save();
-        res.status(201).json(savedLeave);
+        const savedLeave = await leave.save(); // Enregistrer dans la base de données
+        res.status(201).json(savedLeave);      // Retourner les données enregistrées
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        console.error("Error saving leave:", err);
+        res.status(500).json({ message: "Failed to save leave request" });
     }
 });
-
-
-
 
 // Récupérer tous les congés
 router.get('/', async (req, res) => {
     try {
-        const leaves = await Leave.find();
+        const leaves = await Leave.find().populate('employeeId', 'username');  // Peupler employeeId avec le champ username du modèle User
         res.json(leaves);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -40,7 +45,7 @@ router.get('/', async (req, res) => {
 // Récupérer un congé par ID
 router.get('/:id', async (req, res) => {
     try {
-        const leave = await Leave.findById(req.params.id);
+        const leave = await Leave.findById(req.params.id).populate('employeeId', 'username');  // Peupler employeeId avec le champ username du modèle User
         if (!leave) return res.status(404).json({ message: 'Leave not found' });
         res.json(leave);
     } catch (err) {
@@ -71,4 +76,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
