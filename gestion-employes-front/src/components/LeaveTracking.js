@@ -27,7 +27,6 @@ function LeaveTracking() {
             const storedUser = localStorage.getItem('user'); // On suppose que les données utilisateur sont dans localStorage
             if (storedUser) {
                 try {
-                    console.log(parsedUser);
                     const parsedUser = JSON.parse(storedUser);
                     setUserRole(parsedUser.role); // Récupérer et définir le rôle de l'utilisateur
                 } catch (error) {
@@ -103,8 +102,8 @@ function LeaveTracking() {
                                 <td className="py-3 px-6 text-yellow-500">{leave.status}</td>
                                 <td className="py-3 px-6">{leave.reason}</td>
                                 <td className="py-3 px-6 flex space-x-2">
-                                    {/* Vérifier si l'utilisateur a le rôle "user" et si le statut est "Pending" */}
-                                    {(userRole === 'user' && leave.status === 'Pending') && (
+                                    {/* Vérifier si l'utilisateur est un "admin" ou si le statut est "Pending" pour un "user" */}
+                                    {(userRole === 'admin' || (userRole === 'user' && leave.status === 'Pending')) && (
                                         <>
                                             <button 
                                                 onClick={() => {
@@ -124,7 +123,7 @@ function LeaveTracking() {
                                         </>
                                     )}
                                     {/* Afficher un message si l'utilisateur n'a pas le droit */}
-                                    {(userRole !== 'user' || leave.status !== 'Pending') && (
+                                    {(userRole !== 'admin' && (userRole !== 'user' || leave.status !== 'Pending')) && (
                                         <span>Accès restreint</span>
                                     )}
                                 </td>
